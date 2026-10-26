@@ -1,0 +1,122 @@
+@import 'tailwindcss';
+
+@theme {
+  /* ── Obsidian & Gold — colors from context/DESIGN.md ── */
+  --color-surface-container-lowest: #0d0e0f;
+  --color-void: #0d0d0d;
+  --color-surface-dim: #121414;
+  --color-surface: #121414;
+  --color-surface-container-low: #1a1c1c;
+  --color-surface-container: #1e2020;
+  --color-surface-container-high: #292a2a;
+  --color-surface-container-highest: #343535;
+  --color-surface-bright: #383939;
+  --color-on-surface: #e3e2e2;
+  --color-on-surface-variant: #d0c5b1;
+  --color-outline: #99907e;
+  --color-outline-variant: #4d4637;
+
+  --color-primary: #ffe195;
+  --color-on-primary: #3d2e00;
+  --color-primary-container: #e8c461;
+  --color-on-primary-container: #675000;
+  --color-primary-fixed: #ffe08f;
+  --color-primary-fixed-dim: #e7c360;
+
+  --color-secondary: #4ae183;
+  --color-on-secondary: #003919;
+  --color-secondary-container: #06bb63;
+  --color-emerald-void: #2ecc71;
+
+  --color-tertiary: #e6e3e2;
+  --color-error: #ffb4ab;
+
+  /* ── Typography ── */
+  --font-serif: 'Newsreader', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  --text-h1: 48px;
+  --text-h1--line-height: 1.1;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h1--font-weight: 400;
+  --text-h2: 32px;
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.01em;
+  --text-h2--font-weight: 400;
+  --text-h3: 24px;
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: 0.02em;
+  --text-h3--font-weight: 500;
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 1.6;
+  --text-body-md: 16px;
+  --text-body-md--line-height: 1.5;
+  --text-label-caps: 12px;
+  --text-label-caps--line-height: 1;
+  --text-label-caps--letter-spacing: 0.15em;
+  --text-label-caps--font-weight: 600;
+
+  /* ── Spacing (8px rhythm) ── */
+  --spacing-unit: 8px;
+  --spacing-gutter: 24px;
+  --spacing-margin: 40px;
+  --spacing-stack-xs: 4px;
+  --spacing-stack-md: 16px;
+  --spacing-stack-xl: 64px;
+  --spacing-container-max: 1200px;
+}
+
+/* ── Base ── */
+html {
+  font-family: var(--font-sans);
+}
+
+body {
+  @apply bg-surface-container-lowest text-on-surface antialiased;
+  overscroll-behavior: none;
+}
+
+::selection {
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
+/* ── Paper grain texture (5% fractal noise) ── */
+.texture-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* ── Glass veil: 5-10% white + blur + gold border ── */
+.glass-veil {
+  background: rgb(255 255 255 / 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgb(232 196 97 / 0.1);
+}
+
+/* ── Gold glow (candlelight) instead of drop shadow ── */
+.glow-gold {
+  box-shadow: 0 0 15px rgb(232 196 97 / 0.15);
+}
+.glow-emerald {
+  box-shadow: 0 0 15px rgb(46 204 113 / 0.5);
+}
+
+/* ── Ornamental divider: line with rotated gold diamond ── */
+.ornamental-divider {
+  @apply relative flex items-center justify-center;
+}
+.ornamental-divider::before {
+  content: '';
+  @apply h-px w-full bg-gradient-to-r from-transparent via-[#E8C461]/30 to-transparent;
+}
+.ornamental-divider::after {
+  content: '◆';
+  position: absolute;
+  color: var(--color-primary-container);
+  font-size: 10px;
+  background: var(--color-void);
+  padding: 0 10px;
+}
+
+/* ── Fonts loaded locally via Google Fonts link in index.html ── */

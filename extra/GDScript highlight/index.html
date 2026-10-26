@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GDScript Syntax Highlighter</title>
+  <!-- GDScript unified stylesheet -->
+  <link rel="stylesheet" href="css/gdscript.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #11111b;
+      color: #cdd6f4;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 2.5rem 1.5rem;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    header {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid #313244;
+      padding-bottom: 1.25rem;
+    }
+    header h1 {
+      font-size: 2rem;
+      color: #cba6f7;
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      color: #a6adc8;
+      font-size: 1rem;
+    }
+    .article-section {
+      margin-bottom: 2.5rem;
+    }
+    .article-section h2 {
+      font-size: 1.25rem;
+      color: #89b4fa;
+      margin-bottom: 0.5rem;
+    }
+    .article-section p {
+      color: #bac2de;
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+    }
+    .badge {
+      display: inline-block;
+      background: #313244;
+      color: #a6e3a1;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-family: monospace;
+      margin-bottom: 0.5rem;
+    }
+    .callout {
+      background: #181825;
+      border-left: 4px solid #89b4fa;
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      color: #a6adc8;
+    }
+    .callout strong {
+      color: #cdd6f4;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>GDScript Syntax Highlighter</h1>
+      <p>Zero-config syntax highlighter: write plain GDScript inside your HTML divs, and they are formatted automatically on page load.</p>
+    </header>
+
+    <div class="callout">
+      <strong>How it works:</strong> Simply write your GDScript directly inside any <code>&lt;div id="code-block"&gt;</code> or <code>&lt;div class="code-block"&gt;</code>. <code>highlighter.js</code> automatically trims common HTML indentation and highlights all blocks on page load.
+    </div>
+
+    <!-- Article Section 1: Main Character Controller with #code-block -->
+    <article class="article-section">
+      <span class="badge">&lt;div id="code-block"&gt;</span>
+      <h2>1. Character Controller (Nodes, Classes, Types &amp; References)</h2>
+      <p>Demonstrating classes &amp; types (<code>Sprite2D</code> and <code>AnimationPlayer</code>) having the same color, and NodePath references (<code>$Sprite2D</code> and <code>$AnimationPlayer</code>) having matching colors.</p>
+
+      <div id="code-block">
+@tool
+class_name PlayerController
+extends CharacterBody2D
+
+# --- Node References & Types ---
+# Both Sprite2D and AnimationPlayer share identical class/type colors
+# Both $Sprite2D and $AnimationPlayer share identical NodePath colors
+@onready var sprite: Sprite2D = $Sprite2D
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
+# --- Exported Properties & Primitives ---
+@export_range(100.0, 500.0) var run_speed: float = 320.0
+@export var character_name: String = "Godette"
+@export var is_invulnerable: bool = false
+var velocity_vector: Vector2 = Vector2.ZERO
+var score: int = 1500
+
+func _ready() -> void:
+    print("Initializing player: ", character_name)
+    animation_player.play("idle")
+      </div>
+    </article>
+
+    <!-- Article Section 2: Multiple code blocks support with .code-block -->
+    <article class="article-section">
+      <span class="badge">&lt;div class="code-block"&gt;</span>
+      <h2>2. Enemy Spawner (Signals, Enums &amp; Timers)</h2>
+      <p>Second independent code block on the same page.</p>
+
+      <div class="code-block">
+# --- Signals & Enums ---
+signal enemy_spawned(enemy: Node2D, spawn_pos: Vector2)
+
+enum Difficulty { EASY, NORMAL, HARD }
+
+@export var current_difficulty: Difficulty = Difficulty.NORMAL
+@onready var spawn_timer: Timer = $SpawnTimer
+
+func _ready() -> void:
+    spawn_timer.timeout.connect(_on_spawn_timer_timeout)
+    spawn_timer.start(2.5)
+
+func _on_spawn_timer_timeout() -> void:
+    var spawn_count: int = 3
+    if current_difficulty == Difficulty.HARD:
+        spawn_count *= 2
+    print("Spawning enemies: ", spawn_count)
+      </div>
+    </article>
+
+    <!-- Article Section 3: Third code block -->
+    <article class="article-section">
+      <span class="badge">&lt;div class="code-block"&gt;</span>
+      <h2>3. Movement &amp; State Logic</h2>
+      <p>Third independent code block demonstrating physics processing, gravity, and match statements.</p>
+
+      <div class="code-block">
+func _physics_process(delta: float) -> void:
+    # Apply gravity
+    if not is_on_floor():
+        velocity.y += 980.0 * delta
+    else:
+        velocity.y = 0.0
+
+    var direction: float = Input.get_axis("ui_left", "ui_right")
+    velocity.x = direction * run_speed
+    move_and_slide()
+
+func describe_state(state_code: int) -> String:
+    match state_code:
+        0:
+            return "Player is resting."
+        1:
+            return "Player is moving."
+        _:
+            return "Unknown state."
+      </div>
+    </article>
+  </div>
+
+  <!-- Highlighter Script (automatically formats all blocks on load!) -->
+  <script src="js/highlighter.js"></script>
+</body>
+</html>

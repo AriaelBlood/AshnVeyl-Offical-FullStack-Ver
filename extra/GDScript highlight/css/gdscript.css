@@ -1,0 +1,177 @@
+/* ==========================================================================
+   GDScript Syntax Highlighter - Master Stylesheet
+   Covers: container, lines, comments, strings, keywords, decorators,
+           functions, classes, numbers, operators, and built-ins.
+   ========================================================================== */
+
+:root {
+  --gd-bg: #1e1e2e;
+  --gd-text: #cdd6f4;
+  --gd-selection: #45475a;
+  --gd-comment: #6c7086;
+  --gd-string: #a6e3a1;
+  --gd-keyword: #cba6f7;
+  --gd-decorator: #f9e2af;
+  --gd-function: #89b4fa;
+  --gd-class: #f38ba8;
+  --gd-number: #fab387;
+  --gd-operator: #89dceb;
+  --gd-nodepath: #89dceb;
+  --gd-builtin: #94e2d5;
+  --gd-variable: #cdd6f4;
+  --gd-line-num: #585b70;
+}
+
+/* Base Code Block Styling (supports #code-block, .code-block, and pre/div with data-gdscript) */
+#code-block,
+.code-block,
+div.gdscript,
+pre.gdscript {
+  background-color: var(--gd-bg);
+  color: var(--gd-text);
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, Menlo, Monaco, monospace;
+  font-size: 14.5px;
+  line-height: 1.6;
+  padding: 1.25rem 1.5rem;
+  border-radius: 10px;
+  overflow-x: auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  border: 1px solid #313244;
+  tab-size: 4;
+  white-space: pre;
+  margin: 1rem 0;
+}
+
+#code-block code,
+.code-block code,
+div.gdscript code,
+pre.gdscript code {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Line numbers (optional display support) */
+.gd-line {
+  display: block;
+  min-height: 1.6em;
+}
+
+.gd-line-number {
+  display: inline-block;
+  width: 2.5rem;
+  margin-right: 1.25rem;
+  color: var(--gd-line-num);
+  text-align: right;
+  user-select: none;
+  opacity: 0.6;
+}
+
+/* ==========================================================================
+   1. Comments (# ...)
+   ========================================================================== */
+.gd-comment {
+  color: var(--gd-comment);
+  font-style: italic;
+}
+
+/* ==========================================================================
+   2. Strings ("...", '...', """...""")
+   ========================================================================== */
+.gd-string {
+  color: var(--gd-string);
+}
+
+.gd-string-escape {
+  color: #f5c2e7;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   3. Keywords (func, var, const, class, if, else, for, return, await, etc.)
+   ========================================================================== */
+.gd-keyword {
+  color: var(--gd-keyword);
+  font-weight: 600;
+}
+
+/* Specific keyword subsets for optional finer styling */
+.gd-keyword-control {
+  color: var(--gd-keyword);
+  font-weight: 600;
+}
+
+.gd-keyword-declaration {
+  color: #eba0ac;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   4. Decorators / Annotations (@export, @onready, @tool, @rpc, etc.)
+   ========================================================================== */
+.gd-decorator {
+  color: var(--gd-decorator);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   5. Functions (definitions and calls)
+   ========================================================================== */
+.gd-function-name {
+  color: var(--gd-function);
+  font-weight: 600;
+}
+
+.gd-function-call {
+  color: var(--gd-function);
+}
+
+/* ==========================================================================
+   6. Classes & Types (Node, Vector2, CharacterBody2D, int, float, etc.)
+   ========================================================================== */
+.gd-class-name {
+  color: var(--gd-class);
+  font-weight: 600;
+}
+
+.gd-type {
+  color: var(--gd-builtin);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   7. Numbers (integers, floats, hex, binary)
+   ========================================================================== */
+.gd-number {
+  color: var(--gd-number);
+}
+
+/* ==========================================================================
+   8. Operators & Punctuation (+, -, *, =, ==, ->, :, etc.)
+   ========================================================================== */
+.gd-operator {
+  color: var(--gd-operator);
+}
+
+.gd-punctuation {
+  color: #9399b2;
+}
+
+/* ==========================================================================
+   9. Built-in constants & Identifiers (true, false, null, self, super, PI)
+   ========================================================================== */
+.gd-builtin-const {
+  color: #fab387;
+  font-weight: 600;
+}
+
+.gd-identifier {
+  color: var(--gd-variable);
+}
+
+/* ==========================================================================
+   10. NodePath Literals ($Sprite2D, $AnimationPlayer, $"path/to/node", etc.)
+   ========================================================================== */
+.gd-nodepath {
+  color: var(--gd-nodepath);
+  font-weight: 500;
+}
