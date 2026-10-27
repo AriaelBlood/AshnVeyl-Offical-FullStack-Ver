@@ -1,0 +1,114 @@
+/* ==========================================================================
+   GDScript Syntax Highlighter — Obsidian & Gold theme
+   Palette extracted from the Devlog #14 mockup (context/devlog_14...):
+     keywords/declarations  → gold #E8C461
+     identifiers/props      → light  #E3E2E2
+     functions/signals/vars → pale gold #FFE195
+     classes / types        → teal #5EEAD4
+     strings                → amber #FCD34D
+     numbers                → orange #E67E22
+     comments/docstrings    → emerald #2ECC71, italic
+     line numbers           → dim #525252, right rule
+   ========================================================================== */
+
+.gd-theme {
+  background-color: rgb(13 13 13 / 0.95);
+  color: #e3e2e2;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  tab-size: 4;
+  white-space: pre;
+  overflow-x: auto;
+  user-select: text;
+}
+
+.gd-line {
+  display: block;
+  min-height: 1.7em;
+}
+
+.gd-line-number {
+  display: inline-block;
+  width: 2.5rem;
+  margin-right: 1.25rem;
+  padding-right: 0.75rem;
+  text-align: right;
+  color: #525252;
+  border-right: 1px solid #2a2a2a;
+  user-select: none;
+}
+
+.gd-comment {
+  color: #2ecc71;
+  font-style: italic;
+}
+
+.gd-string {
+  color: #fcd34d;
+}
+
+.gd-keyword {
+  color: #e8c461;
+  font-weight: 600;
+}
+
+.gd-keyword-control {
+  color: #e8c461;
+}
+
+.gd-keyword-declaration {
+  color: #e8c461;
+  font-weight: 700;
+}
+
+.gd-decorator {
+  color: #e8c461;
+}
+
+.gd-function-name {
+  color: #ffe195;
+  font-weight: 600;
+}
+
+.gd-function-call {
+  color: #e3e2e2;
+}
+
+.gd-class-name {
+  color: #5eead4;
+}
+
+.gd-type {
+  color: #5eead4;
+}
+
+.gd-nodepath {
+  color: #5eead4;
+}
+
+.gd-number {
+  color: #e67e22;
+}
+
+.gd-operator {
+  color: #e8c461;
+}
+
+.gd-punctuation {
+  color: #a3a3a3;
+}
+
+.gd-builtin-const {
+  color: #e67e22;
+}
+
+.gd-identifier {
+  color: #e3e2e2;
+}
+
+/* Empty lines keep the line-number gutter visible */
+.gd-line:empty::after,
+.gd-line:has(> .gd-line-number:only-child)::after {
+  content: '';
+}

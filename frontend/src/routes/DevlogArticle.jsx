@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
+import CodeBlock from '../components/CodeBlock.jsx'
 import Icon from '../components/Icon.jsx'
 import OrnamentalDivider from '../components/OrnamentalDivider.jsx'
 import PageLayout from '../components/PageLayout.jsx'
@@ -44,20 +45,7 @@ function Block({ block }) {
         </figure>
       )
     case 'code':
-      return (
-        <div className="my-stack-xl overflow-hidden rounded-xl border border-primary-container/20 shadow-[0_12px_36px_rgba(0,0,0,0.7)]">
-          <div className="flex items-center justify-between border-b border-primary-container/15 bg-void/90 px-4 py-3 font-mono text-xs">
-            <span className="flex items-center gap-2 text-primary-container">
-              <Icon name="code" size={14} className="text-emerald-void" />
-              {block.file}
-            </span>
-            <span className="text-on-surface-variant/50">{block.lang}</span>
-          </div>
-          <pre className="overflow-x-auto bg-void/60 p-4 font-mono text-sm leading-relaxed text-on-surface">
-            {block.code}
-          </pre>
-        </div>
-      )
+      return <CodeBlock file={block.file} lang={block.lang} code={block.code} />
     case 'callout':
       return (
         <aside className="glass-veil my-stack-xl rounded-lg p-6">
