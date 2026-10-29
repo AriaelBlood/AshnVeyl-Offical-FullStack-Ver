@@ -3,6 +3,20 @@
  * Designed to map 1:1 to a future GET /api/projects response.
  */
 export const projects = [
+  { // this contain some real data name , link , status engine
+    id: 'dungeon-crush',
+    title: 'Dungeon Crush',
+    category: 'games',
+    type: 'DARK RPG',
+    engine: 'GODOT 4.4',
+    status: 'DISCONTINUED!',
+    live: true,
+    description:
+      'A knight try to escape the dungeon the It shrinks each time. With limited resources.',
+    image: null, // placeholder gradient
+    links: { prototype: 'https://ashn-veyl.itch.io/dungeon-crush' /* Real Link!!! and Should be Release Build not prototype */},
+    devlogLabel: null,
+  },
   {
     id: 'crown-of-the-hollow-king',
     title: 'Crown of the Hollow King',

@@ -61,7 +61,7 @@ export default function Projects() {
           {/* Filter & Search bar */}
           <section className="flex flex-col items-center justify-between gap-stack-md rounded-xl bg-surface-container-lowest/80 p-4 shadow-lg backdrop-blur-md lg:flex-row">
             <FilterPills tabs={tabs} active={active} onChange={setActive} />
-            <div className="w-full lg:w-72">
+            <div className="w-full max-w-sm lg:w-72 lg:max-w-none">
               <SearchInput
                 value={query}
                 onChange={setQuery}

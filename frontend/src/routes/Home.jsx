@@ -50,7 +50,7 @@ export default function Home() {
               </div>
 
               {/* Glass card: development progress */}
-              <div className="glass-veil absolute -left-10 top-10 z-20 w-48 rounded p-4 shadow-lg">
+              <div className="glass-veil absolute left-0 top-6 z-20 w-44 rounded p-4 shadow-lg sm:-left-6 sm:w-48">
                 <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-primary-container">
                   Development Level: 01
                 </p>
@@ -60,7 +60,7 @@ export default function Home() {
               </div>
 
               {/* Glass card: stats */}
-              <div className="glass-veil absolute -right-12 bottom-20 z-20 w-56 space-y-2 rounded p-4 shadow-lg">
+              <div className="glass-veil absolute bottom-16 right-0 z-20 w-48 space-y-2 rounded p-4 shadow-lg sm:-right-8 sm:w-56">
                 <div className="flex justify-between border-b border-primary-container/20 pb-2">
                   <span className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-on-surface-variant">
                     Games Released:
@@ -76,7 +76,7 @@ export default function Home() {
               </div>
 
               {/* Glass card: engine */}
-              <div className="glass-veil absolute -bottom-6 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded p-3 shadow-lg">
+              <div className="glass-veil absolute -bottom-6 left-1/2 z-20 max-w-[90%] -translate-x-1/2 whitespace-nowrap rounded p-3 text-center shadow-lg">
                 <span className="mr-2 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-on-surface-variant">
                   Main Engine:
                 </span>

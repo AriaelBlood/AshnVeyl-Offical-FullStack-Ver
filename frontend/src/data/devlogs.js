@@ -2,6 +2,8 @@
  * Mock devlog data — structured blocks (per plan decision #3).
  * Maps 1:1 to a future GET /api/devlogs and GET /api/devlogs/:slug.
  *
+ * WARNING : the backend need re-plan about how to add/edit/store data 
+ *
  * Block types:
  *   { type: 'paragraph', text }
  *   { type: 'heading',   text }

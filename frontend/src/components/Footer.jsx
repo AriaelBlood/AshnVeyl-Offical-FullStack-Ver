@@ -1,4 +1,10 @@
-const socials = ['Twitter' , 'Discord', 'Itch.io', 'Press Kit']
+const socials = [
+  { name: 'Twitter', href: '#' },
+  { name: 'Discord', href: '#' },
+  { name: 'Itch.io', href: 'https://ashn-veyl.itch.io/' },
+  { name: 'Github', href: 'https://github.com/AriaelBlood' }, // the username will be changed soon~!!!
+  { name: 'Press Kit', href: '#' },
+]
 
 export default function Footer() {
   return (
@@ -10,7 +16,7 @@ export default function Footer() {
         <div className="h-px w-1/3 bg-gradient-to-l from-transparent to-primary-container/30" />
       </div>
 
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-20 py-16 md:grid-cols-3">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-16 md:grid-cols-3 md:px-20">
         <div className="flex flex-col justify-between gap-4">
           <span className="text-lg font-black text-primary-container">ASHN VEYL</span>
           <span className="font-serif text-sm uppercase tracking-widest text-primary-container/70">
@@ -18,13 +24,9 @@ export default function Footer() {
           </span>
         </div>
         <div className="flex flex-wrap items-start justify-start gap-8 font-serif text-sm uppercase tracking-widest md:justify-end md:col-span-2">
-          {socials.map((s) => (
-            <a
-              key={s}
-              href="#"
-              className="text-stone-400 opacity-80 transition-opacity hover:text-primary-container hover:underline hover:opacity-100 decoration-primary-container/50"
-            >
-              {s}
+          {socials.map(({ name, href }) => (
+            <a key={name} href={href} className="text-stone-400 opacity-80 transition-opacity hover:text-primary-container hover:underline hover:opacity-100 decoration-primary-container/50">
+              {name}
             </a>
           ))}
         </div>
