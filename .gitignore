@@ -1,2 +1,4 @@
 context/
 plan.md
+.env
+node_modules/
