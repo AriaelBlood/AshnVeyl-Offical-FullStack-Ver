@@ -7,18 +7,31 @@ import Icon from './Icon.jsx'
  * category label, title, description, footer links.
  */
 export default function ProjectCard({ project }) {
+  if (!project) return null
+  const primaryHref = project.links?.prototype || '#'
+  const isExternal = /^https?:\/\//i.test(primaryHref)
+  const devlogHref = project.links?.devlog
+
   return (
     <article className="group flex flex-col justify-between overflow-hidden rounded-xl bg-surface-container-lowest/70 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.9)]">
       <div>
-        {/* Placeholder image area */}
+        {/* Image area */}
         <div className="relative aspect-video w-full overflow-hidden bg-surface-container-high">
-          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-surface-container-high via-surface-container to-void">
-            <Icon
-              name="image"
-              size={56}
-              className="text-primary-container/20 transition-transform duration-500 group-hover:scale-105"
+          {project.image ? (
+            <img
+              src={project.image}
+              alt={project.title}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
-          </div>
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-surface-container-high via-surface-container to-void">
+              <Icon
+                name="image"
+                size={56}
+                className="text-primary-container/20 transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/20 to-transparent" />
           {/* Status badge */}
           {project.status && (
@@ -54,20 +67,36 @@ export default function ProjectCard({ project }) {
       </div>
       {/* Footer links */}
       <div className="flex items-center justify-between px-4 pb-4 pt-1">
-        <Link
-          to={project.links.prototype || '#'}
-          className="group/link inline-flex items-center gap-1 font-sans text-xs font-semibold uppercase tracking-wider text-primary transition-colors hover:text-secondary"
-        >
-          <span>{project.live ? 'Prototype Build' : 'View Project'}</span>
-          <Icon
-            name={project.live ? 'open_in_new' : 'arrow_forward'}
-            size={16}
-            className="transition-transform group-hover/link:translate-x-0.5"
-          />
-        </Link>
-        {project.devlogLabel && (
+        {isExternal ? (
+          <a
+            href={primaryHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group/link inline-flex items-center gap-1 font-sans text-xs font-semibold uppercase tracking-wider text-primary transition-colors hover:text-secondary"
+          >
+            <span>{project.live ? 'Prototype Build' : 'View Project'}</span>
+            <Icon
+              name="open_in_new"
+              size={16}
+              className="transition-transform group-hover/link:translate-x-0.5"
+            />
+          </a>
+        ) : (
           <Link
-            to={project.links.devlog || '#'}
+            to={primaryHref}
+            className="group/link inline-flex items-center gap-1 font-sans text-xs font-semibold uppercase tracking-wider text-primary transition-colors hover:text-secondary"
+          >
+            <span>{project.live ? 'Prototype Build' : 'View Project'}</span>
+            <Icon
+              name={project.live ? 'open_in_new' : 'arrow_forward'}
+              size={16}
+              className="transition-transform group-hover/link:translate-x-0.5"
+            />
+          </Link>
+        )}
+        {project.devlogLabel && devlogHref && (
+          <Link
+            to={devlogHref}
             className="font-mono text-[11px] tracking-tighter text-on-surface-variant transition-colors hover:text-primary"
           >
             {project.devlogLabel}

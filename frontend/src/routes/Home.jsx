@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   FeaturedDevlogCard,
@@ -6,15 +7,30 @@ import {
 import OrnamentalDivider from '../components/OrnamentalDivider.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import SearchInput from '../components/SearchInput.jsx'
-import { devlogs } from '../data/devlogs.js'
+import { useDevlogs } from '../lib/hooks.js'
+import { useSeals } from '../lib/seals.jsx'
 
 export default function Home() {
-  const featured = devlogs.find((d) => d.featured) || devlogs[0]
-  const latest = devlogs.filter((d) => d.slug !== featured.slug).slice(0, 3)
+  const [query, setQuery] = useState('')
+  const { data: devlogs, loading, isFallback } = useDevlogs()
+  const { clickAvatar, sealState } = useSeals()
+  const sealActive = sealState === 'armed'
+
+  const visible = useMemo(() => {
+    const list = devlogs || []
+    const q = query.trim().toLowerCase()
+    if (!q) return list
+    return list.filter((d) =>
+      [d.title, d.summary, d.category, d.number].join(' ').toLowerCase().includes(q),
+    )
+  }, [devlogs, query])
+
+  const featured = visible.find((d) => d.featured) || visible[0]
+  const latest = visible.filter((d) => d.slug !== featured?.slug).slice(0, 3)
 
   return (
     <PageLayout>
-      <main className="mx-auto max-w-container-max px-margin pb-stack-xl pt-[120px]">
+      <main className="mx-auto max-w-container-max px-margin pb-stack-xl pt-stack-md">
         {/* ── Hero Section ── */}
         <section className="relative mb-stack-xl grid min-h-[70vh] grid-cols-1 items-center gap-gutter md:grid-cols-2">
           <div className="z-10 space-y-stack-md">
@@ -44,10 +60,15 @@ export default function Home() {
           {/* Hero visual + floating glass stat cards */}
           <div className="relative flex h-full items-center justify-center">
             <div className="relative aspect-square w-full max-w-md">
-              {/* Placeholder character render */}
-              <div className="absolute inset-0 z-0 flex items-center justify-center rounded-lg bg-gradient-to-br from-surface-container-high via-surface-container to-void shadow-[0_0_30px_rgba(232,196,97,0.15)]">
+              {/* Placeholder character render — Seal II (click while armed) */}
+              <button
+                type="button"
+                onClick={clickAvatar}
+                aria-label="The Hunter's character render"
+                className={`absolute inset-0 z-0 flex items-center justify-center rounded-lg bg-gradient-to-br from-surface-container-high via-surface-container to-void shadow-[0_0_30px_rgba(232,196,97,0.15)] transition-shadow duration-500 ${sealActive ? 'cursor-pointer shadow-[0_0_40px_rgba(46,204,113,0.6)]' : ''}`}
+              >
                 <span className="font-serif text-8xl text-primary-container/20">☾</span>
-              </div>
+              </button>
 
               {/* Glass card: development progress */}
               <div className="glass-veil absolute left-0 top-6 z-20 w-44 rounded p-4 shadow-lg sm:-left-6 sm:w-48">
@@ -90,8 +111,8 @@ export default function Home() {
         <section className="mb-stack-xl flex justify-center">
           <div className="w-full max-w-2xl">
             <SearchInput
-              value=""
-              onChange={() => {}}
+              value={query}
+              onChange={setQuery}
               placeholder="Search the archives..."
               roundedFull
             />
@@ -105,13 +126,31 @@ export default function Home() {
             <OrnamentalDivider className="flex-grow" />
           </div>
 
-          <FeaturedDevlogCard devlog={featured} />
+          {loading ? (
+            <p className="py-stack-md text-center font-sans text-sm uppercase tracking-widest text-on-surface-variant/50">
+              Opening the archive…
+            </p>
+          ) : visible.length > 0 ? (
+            <>
+              {isFallback && (
+                <p className="text-center font-sans text-xs uppercase tracking-widest text-error/60">
+                  Archive link severed — showing cached manuscripts.
+                </p>
+              )}
 
-          <div className="grid grid-cols-1 gap-gutter md:grid-cols-2 lg:grid-cols-3">
-            {latest.map((devlog) => (
-              <DevlogCard key={devlog.slug} devlog={devlog} />
-            ))}
-          </div>
+              {featured && <FeaturedDevlogCard devlog={featured} />}
+
+              <div className="grid grid-cols-1 gap-gutter md:grid-cols-2 lg:grid-cols-3">
+                {latest.map((devlog) => (
+                  <DevlogCard key={devlog.slug} devlog={devlog} />
+                ))}
+              </div>
+            </>
+          ) : (
+            <p className="py-stack-md text-center font-sans text-on-surface-variant/60">
+              No manuscripts match your incantation.
+            </p>
+          )}
         </section>
       </main>
     </PageLayout>

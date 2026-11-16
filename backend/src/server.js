@@ -14,7 +14,7 @@ import notificationsRoutes from './routes/notifications.routes.js'
 
 const app = express()
 const PORT = process.env.PORT || 5000
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173'
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5174'
 
 // Core middlewares
 app.use(

@@ -3,7 +3,8 @@ import CodeBlock from '../components/CodeBlock.jsx'
 import Icon from '../components/Icon.jsx'
 import OrnamentalDivider from '../components/OrnamentalDivider.jsx'
 import PageLayout from '../components/PageLayout.jsx'
-import { devlogs } from '../data/devlogs.js'
+import { useAuth } from '../lib/auth.jsx'
+import { useDevlog } from '../lib/hooks.js'
 
 /**
  * Block renderer — structured JS data blocks from src/data/devlogs.js.
@@ -34,8 +35,16 @@ function Block({ block }) {
     case 'image':
       return (
         <figure className="my-stack-xl">
-          <div className="glass-veil flex h-64 items-center justify-center rounded-lg glow-gold">
-            <Icon name="image" size={48} className="text-primary-container/20" />
+          <div className="glass-veil flex h-64 items-center justify-center overflow-hidden rounded-lg glow-gold">
+            {block.src ? (
+              <img
+                src={block.src}
+                alt={block.alt || block.caption || ''}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <Icon name="image" size={48} className="text-primary-container/20" />
+            )}
           </div>
           {block.caption && (
             <figcaption className="mt-2 text-center font-sans text-xs uppercase tracking-widest text-on-surface-variant/60">
@@ -65,9 +74,22 @@ function Block({ block }) {
 
 export default function DevlogArticle() {
   const { slug } = useParams()
-  const devlog = devlogs.find((d) => d.slug === slug)
+  const { isAdmin } = useAuth()
+  const { data: devlog, loading, error } = useDevlog(slug)
 
-  if (!devlog) {
+  if (loading) {
+    return (
+      <PageLayout>
+        <main className="flex min-h-[60vh] items-center justify-center">
+          <p className="font-sans text-sm uppercase tracking-widest text-on-surface-variant/50">
+            Unrolling the manuscript…
+          </p>
+        </main>
+      </PageLayout>
+    )
+  }
+
+  if (error && !devlog) {
     return (
       <PageLayout>
         <main className="flex min-h-[60vh] flex-col items-center justify-center gap-stack-md text-center">
@@ -99,16 +121,24 @@ export default function DevlogArticle() {
           <h1 className="mb-stack-md max-w-4xl font-serif text-h1 leading-tight text-primary-container">
             {devlog.title}
           </h1>
-          {/* Hero image placeholder */}
+          {/* Hero image */}
           <div className="glass-veil relative mt-stack-md flex h-[300px] w-full items-center justify-center overflow-hidden rounded-lg glow-gold md:h-[500px]">
-            <Icon name="image" size={72} className="text-primary-container/20" />
+            {devlog.image ? (
+              <img
+                src={devlog.image}
+                alt={devlog.title}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <Icon name="image" size={72} className="text-primary-container/20" />
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-void to-transparent opacity-60" />
           </div>
         </section>
 
         {/* Article body */}
         <article className="mx-auto mb-stack-xl max-w-[800px]">
-          {devlog.blocks.map((block, i) => (
+          {(devlog.blocks || []).map((block, i) => (
             <Block key={i} block={block} />
           ))}
         </article>
@@ -116,12 +146,22 @@ export default function DevlogArticle() {
         {/* Back navigation */}
         <div className="mx-auto max-w-[800px]">
           <OrnamentalDivider className="mb-stack-md" />
-          <Link
-            to="/devlogs"
-            className="flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-primary-container transition-colors hover:text-emerald-void"
-          >
-            <Icon name="arrow_forward" size={16} className="rotate-180" /> All Manuscripts
-          </Link>
+          <div className="flex items-center justify-between">
+            <Link
+              to="/devlogs"
+              className="flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-widest text-primary-container transition-colors hover:text-emerald-void"
+            >
+              <Icon name="arrow_forward" size={16} className="rotate-180" /> All Manuscripts
+            </Link>
+            {isAdmin && (
+              <Link
+                to={`/studio?edit=${encodeURIComponent(devlog.slug)}`}
+                className="flex items-center gap-1.5 font-sans text-xs font-semibold uppercase tracking-widest text-primary-fixed-dim transition-colors hover:text-emerald-void"
+              >
+                <Icon name="edit" size={14} /> Edit in Studio
+              </Link>
+            )}
+          </div>
         </div>
       </main>
     </PageLayout>

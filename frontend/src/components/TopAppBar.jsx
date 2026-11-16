@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import Icon from './Icon.jsx'
 
 const links = [
@@ -12,7 +12,18 @@ const links = [
 
 export default function TopAppBar() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const navigate = useNavigate()
   const closeMenu = () => setMenuOpen(false)
+
+  const handleSearchClick = () => {
+    const input = document.querySelector('input[type="text"][placeholder]')
+    if (input) {
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      input.focus()
+    } else {
+      navigate('/devlogs')
+    }
+  }
 
   const linkClass = ({ isActive }) =>
     `font-serif text-lg italic tracking-tight transition-all duration-300 focus-visible:outline focus-visible:outline-1 focus-visible:outline-primary-container ${isActive
@@ -45,6 +56,7 @@ export default function TopAppBar() {
           <button
             type="button"
             aria-label="Search"
+            onClick={handleSearchClick}
             className="rounded-full p-2 transition-all duration-300 hover:bg-white/5 hover:backdrop-blur-lg focus-visible:outline focus-visible:outline-1 focus-visible:outline-primary-container active:scale-95"
           >
             <Icon name="search" size={22} />

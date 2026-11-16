@@ -6,18 +6,20 @@ import {
   FeaturedDevlogCard,
   DevlogCard,
 } from '../components/DevlogCard.jsx'
-import { devlogs } from '../data/devlogs.js'
+import { useDevlogs } from '../lib/hooks.js'
 
 export default function Devlogs() {
   const [query, setQuery] = useState('')
+  const { data: devlogs, loading, isFallback } = useDevlogs()
 
   const visible = useMemo(() => {
+    const list = devlogs || []
     const q = query.trim().toLowerCase()
-    if (!q) return devlogs
-    return devlogs.filter((d) =>
+    if (!q) return list
+    return list.filter((d) =>
       [d.title, d.summary, d.category, d.number].join(' ').toLowerCase().includes(q),
     )
-  }, [query])
+  }, [devlogs, query])
 
   const featured = visible.find((d) => d.featured) || visible[0]
   const rest = visible.filter((d) => d !== featured)
@@ -56,8 +58,17 @@ export default function Devlogs() {
             />
           </section>
 
-          {visible.length > 0 ? (
+          {loading ? (
+            <p className="py-stack-xl text-center font-sans text-sm uppercase tracking-widest text-on-surface-variant/50">
+              Opening the archive…
+            </p>
+          ) : visible.length > 0 ? (
             <>
+              {isFallback && (
+                <p className="text-center font-sans text-xs uppercase tracking-widest text-error/60">
+                  Archive link severed — showing cached manuscripts.
+                </p>
+              )}
               {featured && <FeaturedDevlogCard devlog={featured} />}
               <div className="grid grid-cols-1 gap-gutter md:grid-cols-2 lg:grid-cols-3">
                 {rest.map((devlog) => (

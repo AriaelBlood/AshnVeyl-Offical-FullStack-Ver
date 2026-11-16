@@ -1,4 +1,5 @@
 context/
 plan.md
 .env
+dev-server.log
 node_modules/

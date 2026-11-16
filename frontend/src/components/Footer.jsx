@@ -1,3 +1,5 @@
+import { useSeals } from '../lib/seals.jsx'
+
 const socials = [
   { name: 'Twitter', href: '#' },
   { name: 'Discord', href: '#' },
@@ -7,12 +9,27 @@ const socials = [
 ]
 
 export default function Footer() {
+  const { clickDiamond, diamondTurns, sealState } = useSeals()
+
   return (
     <footer className="relative w-full border-t border-primary-container/10 bg-void">
-      {/* Ornamental divider */}
+      {/* Ornamental divider — the diamond is Seal I: click it 3 times */}
       <div className="absolute left-1/2 top-0 flex w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center">
         <div className="h-px w-1/3 bg-gradient-to-r from-transparent to-primary-container/30" />
-        <div className="mx-2 h-3 w-3 rotate-45 border border-primary-container bg-void" />
+        <button
+          type="button"
+          aria-label="Ornamental diamond"
+          onClick={clickDiamond}
+          className={`mx-2 h-3 w-3 rotate-45 border border-primary-container bg-void transition-all duration-300 ${
+            diamondTurns === 1
+              ? 'rotate-[90deg] shadow-[0_0_10px_rgba(232,196,97,0.6)]'
+              : diamondTurns === 2
+                ? 'rotate-[135deg] shadow-[0_0_12px_rgba(46,204,113,0.7)]'
+                : sealState === 'armed'
+                  ? 'shadow-[0_0_15px_rgba(46,204,113,0.8)]'
+                  : ''
+          }`}
+        />
         <div className="h-px w-1/3 bg-gradient-to-l from-transparent to-primary-container/30" />
       </div>
 

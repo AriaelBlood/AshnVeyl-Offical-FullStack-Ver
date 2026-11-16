@@ -5,16 +5,26 @@ import Icon from './Icon.jsx'
  * Featured devlog card (Home mockup): wide glass card, image half + content half.
  */
 export function FeaturedDevlogCard({ devlog }) {
+  if (!devlog) return null
+
   return (
     <Link
       to={`/devlogs/${devlog.slug}`}
       className="group glass-veil flex flex-col overflow-hidden rounded-lg transition-all duration-500 hover:shadow-[0_0_20px_rgba(232,196,97,0.1)] md:flex-row"
     >
-      {/* Image half — placeholder gradient */}
-      <div className="relative h-64 w-full bg-gradient-to-br from-surface-container-high via-surface-container to-void md:h-auto md:w-1/2">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Icon name="image" size={64} className="text-primary-container/20" />
-        </div>
+      {/* Image half — real image if set, otherwise placeholder gradient */}
+      <div className="relative h-64 w-full overflow-hidden bg-gradient-to-br from-surface-container-high via-surface-container to-void md:h-auto md:w-1/2">
+        {devlog.image ? (
+          <img
+            src={devlog.image}
+            alt={devlog.title}
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Icon name="image" size={64} className="text-primary-container/20" />
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent md:bg-gradient-to-l md:from-surface-container-lowest/90 md:to-transparent" />
         <div className="absolute left-4 top-4 rounded bg-primary-container px-2 py-1 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-on-primary-container shadow-md">
           FEATURED
@@ -47,18 +57,28 @@ export function FeaturedDevlogCard({ devlog }) {
  * Devlog grid card (Home mockup, latest articles).
  */
 export function DevlogCard({ devlog }) {
+  if (!devlog) return null
+
   return (
     <Link
       to={`/devlogs/${devlog.slug}`}
       className="group glass-veil flex flex-col overflow-hidden rounded-lg transition-all hover:shadow-[0_0_15px_rgba(232,196,97,0.1)]"
     >
-      {/* Placeholder image strip */}
+      {/* Image strip */}
       <div className="relative flex h-48 items-center justify-center overflow-hidden border-b border-primary-container/20 bg-surface-container-high">
-        <Icon
-          name="image"
-          size={64}
-          className="text-primary-container/30 transition-colors duration-500 group-hover:text-primary-container/60"
-        />
+        {devlog.image ? (
+          <img
+            src={devlog.image}
+            alt={devlog.title}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <Icon
+            name="image"
+            size={64}
+            className="text-primary-container/30 transition-colors duration-500 group-hover:text-primary-container/60"
+          />
+        )}
       </div>
       <div className="flex flex-grow flex-col gap-3 p-6">
         <div className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-on-surface-variant">

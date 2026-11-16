@@ -1,23 +1,42 @@
 import { useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import OrnamentalDivider from '../components/OrnamentalDivider.jsx'
 import ProjectCard from '../components/ProjectCard.jsx'
 import SearchInput from '../components/SearchInput.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import FilterPills from '../components/FilterPills.jsx'
-import { categories, projects } from '../data/projects.js'
+import { useProjects } from '../lib/hooks.js'
+import { categories } from '../data/projects.js'
+
+const VALID_FILTERS = new Set(['all', 'games', 'art', 'motion'])
 
 export default function Projects() {
-  const [active, setActive] = useState('all')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const paramFilter = searchParams.get('filter')
+  const active = paramFilter && VALID_FILTERS.has(paramFilter) ? paramFilter : 'all'
   const [query, setQuery] = useState('')
+  const { data: projects, loading, isFallback } = useProjects()
 
-  const tabs = categories.map((cat) => ({
+  const selectCategory = (id) => {
+    if (id === 'all') {
+      setSearchParams({}, { replace: true })
+    } else {
+      setSearchParams({ filter: id }, { replace: true })
+    }
+  }
+
+  const tabs = (categories || []).map((cat) => ({
     ...cat,
-    count: cat.id === 'all' ? projects.length : projects.filter((p) => p.category === cat.id).length,
+    count:
+      cat.id === 'all'
+        ? (projects || []).length
+        : (projects || []).filter((p) => p.category === cat.id).length,
   }))
 
   const visible = useMemo(() => {
+    const list = projects || []
     const q = query.trim().toLowerCase()
-    return projects.filter((p) => {
+    return list.filter((p) => {
       const inCategory = active === 'all' || p.category === active
       const inQuery =
         !q ||
@@ -28,7 +47,7 @@ export default function Projects() {
           .includes(q)
       return inCategory && inQuery
     })
-  }, [active, query])
+  }, [projects, active, query])
 
   return (
     <PageLayout>
@@ -60,7 +79,7 @@ export default function Projects() {
 
           {/* Filter & Search bar */}
           <section className="flex flex-col items-center justify-between gap-stack-md rounded-xl bg-surface-container-lowest/80 p-4 shadow-lg backdrop-blur-md lg:flex-row">
-            <FilterPills tabs={tabs} active={active} onChange={setActive} />
+            <FilterPills tabs={tabs} active={active} onChange={selectCategory} />
             <div className="w-full max-w-sm lg:w-72 lg:max-w-none">
               <SearchInput
                 value={query}
@@ -71,12 +90,23 @@ export default function Projects() {
           </section>
 
           {/* Archive Grid */}
-          {visible.length > 0 ? (
-            <div className="grid grid-cols-1 gap-gutter md:grid-cols-2 lg:grid-cols-3">
-              {visible.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
-            </div>
+          {loading ? (
+            <p className="py-stack-xl text-center font-sans text-sm uppercase tracking-widest text-on-surface-variant/50">
+              Unsealing the Codex…
+            </p>
+          ) : visible.length > 0 ? (
+            <>
+              {isFallback && (
+                <p className="text-center font-sans text-xs uppercase tracking-widest text-error/60">
+                  Codex link severed — showing cached works.
+                </p>
+              )}
+              <div className="grid grid-cols-1 gap-gutter md:grid-cols-2 lg:grid-cols-3">
+                {visible.map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))}
+              </div>
+            </>
           ) : (
             <p className="py-stack-xl text-center font-sans text-on-surface-variant/60">
               Nothing found in this wing of the archive.
